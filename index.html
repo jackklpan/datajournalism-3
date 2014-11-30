@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)http://w.csie.org/~b98902040/election_2014/election.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>2014九合一選舉</title>
+		<script src="./2014九合一選舉_files/d3.js"></script>
+		<script src="./2014九合一選舉_files/topojson.js"></script>
+		<script src="./2014九合一選舉_files/jquery-1.11.1.js"></script>
+		<script src="./2014九合一選舉_files/underscore.js"></script>
+		<script src="./2014九合一選舉_files/queue.v1.js"></script>
+		<style>
+			* {
+				position: relative;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				font-family: Helvetica, Verdana, Arial, Tahoma, 微軟正黑體;
+			}
+			html, body {
+				width: 100%;
+				height: 100%;
+				margin: 0; 
+				padding: 0;
+			}
+			#mayor-map > svg {
+				width: 600px;
+				height: 630px;
+			}
+			#councilor-map > svg {
+				width: 250px;
+				height: 470px;
+			}
+			.county-area{ 
+				cursor: pointer; 
+			}
+			.county-boundary {
+				fill: none;
+				stroke: white;
+				stroke-linejoin: round;
+			}
+
+			#mayor-tooltip {
+				position: absolute;
+				width: 322px;
+				overflow: auto;
+				background: white;
+				z-index: 1;
+				padding: 16px 22px 28px 22px;
+				box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.35);
+			}
+			#mayor-tooltip .region-info, #mayor-tooltip .region-title, #mayor-tooltip .region-table { 
+				width: 278px; 
+				font-size: 14pt;
+			}
+			#mayor-tooltip .region-info .region-title{
+				height: 46px;
+				line-height: 46px;
+				font-size: 18pt;
+				font-weight: bold;
+				color: #505050;
+			}
+			
+			#councilor-map {
+				width: 250px;
+				height: 470px;
+				position: absolute;
+				top: 159px;
+			}
+			#councilor-result {
+				width: 645px;
+				min-height: 550px;
+				max-height: 550px;
+				position: absolute;
+				top: 148px;
+				left: 278px;
+				padding: 24px 0px 0px 24px;
+				box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.35);
+			}
+			#councilor-result .region-info, #councilor-result .region-title, #councilor-result .region-table { 
+				width: 582px; 
+				font-size: 14pt;
+			}
+			#councilor-result .region-table{ margin-bottom: 14px; }
+			#councilor-result .region-info .region-title{
+				height: 32px;
+				line-height: 32px;
+				background: #dedede; 
+				padding-left: 8px;
+			}
+			#councilor-result .region-thead, #councilor-result .candidate-result { position: absolute; }
+
+			.region-thead, .candidate-result {
+				border-bottom: 1px solid #a0a0a0; 
+				overflow: hidden;
+			}		
+			.region-thead {
+				font-size: 10pt; 
+				color: #a0a0a0;
+			}
+			.region-thead > div, .candidate-result > div { 
+				display: inline-block; 
+				vertical-align: top;
+				text-align: center;
+				padding-top: 4px;
+			}
+			.candidate-result > .party, .region-thead > .party { width: 46px; }
+			.candidate-result > .name, .region-thead > .name { width: 64px; }
+			.candidate-result > .votes, .region-thead > .votes { width: 69px; }
+			.candidate-result > .pct, .region-thead > .pct { width: 69px; }
+			.candidate-result > .gender, .region-thead > .gender { width: 30px; }
+			.candidate-result > .votes, .candidate-result > .pct { text-align: right; }
+			.candidate-result > .gender, .candidate-result > .party { text-align: center; }
+			.candidate-result img { 
+				max-width: 30px;
+				max-height: 20px;
+			}
+			#mayor-section, #councilor-section {
+				width: 960px;
+				min-height: 1000px;
+				margin: 0 auto;
+				padding-top: 60px
+			}
+			#mayor-map {
+				margin-top: 42px;
+			}
+			#mayor-title, #councilor-title {
+				height: 55px; 
+				border-bottom: 1px solid #a0a0a0;
+			}
+			#mayor-title > .zh-title, #councilor-title > .zh-title {
+				font-size: 28pt; 
+				vertical-align: middle; 
+				font-weight: bold; 
+				color: #505050
+			}
+			#mayor-title > .en-title, #councilor-title > .en-title {
+				position: absolute;
+				right: 0px;
+				bottom: 6px;
+				font-size: 12pt; 
+				color: #a0a0a0;
+			}
+			.logo {
+				width: 35px; 
+				height: 35px; 
+				margin-right: 15px; 
+				vertical-align: middle;
+			}
+			#councilor-seats {
+				width: 582px; 
+				height: 200px;
+				position: absolute;
+			}
+			#councilor-seats .councilor-party {
+				width: 380px;
+				height: 145px;
+				position: absolute;
+				left: 101px;
+				top: 41px;
+			}
+			#councilor-seats #party-seats-title {
+				padding: 5px 0px 0px 5px;
+				font-size: 15pt;
+				color: #505050;
+				font-weight: bold;
+			}
+			#councilor-tooltip {
+				position: absolute;
+				padding: 8px 8px 8px 8px;
+				background: white;
+				box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.35);
+			}
+			#councilor-seats svg g g path {
+				cursor: pointer;
+			}
+			#councilor-info-wrapper {
+				margin-top: 200px;
+				height: 300px;
+				max-height: 300px;
+				overflow-y: auto;
+			}
+			#councilor-section ul li{
+				cursor: pointer; 
+				display: inline-block; 
+				
+				box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.35);
+				margin: 0 5px;
+			}
+			#councilor-map {
+				opacity: 1.0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="mayor-section">
+			<div id="mayor-title">
+				<img class="logo" src="img/icon/logo.png" alt="logo">
+				<span class="zh-title">2014 臺灣縣市長選舉結果</span>
+				<span class="en-title">NINE-IN-ONE ELECTIONS</span>
+			</div>		
+			<div>資料來源：中選會</div>
+			<div id="mayor-map"></div>
+		</div>
+
+		<div id="councilor-section">
+			<div id="councilor-title">
+				<img class="logo" src="img/icon/logo.png" alt="logo">
+				<span class="zh-title">2014 臺灣縣市議員選舉結果</span>
+				<span class="en-title">NINE-IN-ONE ELECTIONS</span>
+			</div>
+			<div>資料來源：中選會</div>
+			<div id="councilor-map"></div>
+			<ul>
+				<li class="澎湖縣">澎湖縣</li>
+				<li class="金門縣">金門縣</li>
+				<li class="連江縣">連江縣</li>
+			</ul>
+			<div id="councilor-result">
+				<div id="councilor-seats">
+					<div id="party-seats-title"></div>
+				</div>
+				<div id="councilor-info-wrapper"></div>
+			</div>
+		</div>
+		
+		<div id="mayor-tooltip"></div>
+		<div id="councilor-tooltip"></div>
+	</body>
+	<script>
+		var countyInfos, donutPaths;
+		d3.json("json/tw-county-2014.topo.json", function(error, data){
+			if (error) return console.error(error);
+			
+			makeMap(d3.select("#mayor-map"), data, d3.geo.mercator().center([121.75, 24.6]).scale(7500));
+			makeMap(d3.select("#councilor-map"), data, d3.geo.mercator().center([124.05, 23.5]).scale(6600));
+			
+			appendRegionInfos(d3.select("#councilor-info-wrapper"));
+			appendTooltip(d3.select("#mayor-tooltip"))
+			d3.select("#councilor-map .臺北市").style("fill", "gold");
+			d3.select("#mayor-tooltip").style("display", "none");
+			
+			$("#councilor-section li.澎湖縣").click(function(){
+				d3.selectAll("#councilor-map path.county-area").style("fill", "black");
+				$("#councilor-section li").css("background", "transparent");
+				$(this).css("background", "gold");
+				
+
+				$("#councilor-result .region-info").hide();
+				$("#councilor-result .region-info.澎湖縣").toggle(400);
+				
+				// councilor-party-seats
+				$("#councilor-result #party-seats-title").text("澎湖縣議員席次分配")
+				$("#councilor-result .councilor-party").hide();
+				var partySeats = $("#councilor-result .councilor-party.澎湖縣");
+
+				partySeats.show(400);
+			})
+			$("#councilor-section li.金門縣").click(function(){
+				d3.selectAll("#councilor-map path.county-area").style("fill", "black");
+				$("#councilor-section li").css("background", "transparent");
+				$(this).css("background", "gold");
+
+				$("#councilor-result .region-info").hide();
+				$("#councilor-result .region-info.金門縣").toggle(400);
+				
+				// councilor-party-seats
+				$("#councilor-result #party-seats-title").text("金門縣議員席次分配")
+				$("#councilor-result .councilor-party").hide();
+				var partySeats = $("#councilor-result .councilor-party.金門縣");
+
+				partySeats.show(400);
+			})
+			$("#councilor-section li.連江縣").click(function(){
+				d3.selectAll("#councilor-map path.county-area").style("fill", "black");
+				$("#councilor-section li").css("background", "transparent");
+				$(this).css("background", "gold");
+
+				$("#councilor-result .region-info").hide();
+				$("#councilor-result .region-info.連江縣").toggle(400);
+				
+				// councilor-party-seats
+				$("#councilor-result #party-seats-title").text("連江縣議員席次分配")
+				$("#councilor-result .councilor-party").hide();
+				var partySeats = $("#councilor-result .councilor-party.連江縣");
+
+				partySeats.show(400);
+			})
+		});
+		function drawSeatsGraph(data){
+			var regionsData = _.groupBy(data, function(row){ return row["縣市"] });
+			var countyNames = _.keys(regionsData)
+			
+			var partyChart = d3.select("#councilor-seats").selectAll(".councilor-party")
+					.data(countyNames)
+				.enter().append("div")
+					.attr("class", function(d){ return "councilor-party "+d })
+					.each(function(d, i){
+						var ringLists = genRingLists(d3.select(".councilor-seats"), regionsData[d] );
+						drawPartialDonut(d3.select(this), ringLists);
+						d3.select(this).style("display", "none");
+					})
+
+			$("#councilor-result #party-seats-title").text("臺北市議員席次分配")
+			$("#councilor-result .councilor-party.臺北市").show();
+			$("#councilor-result .region-info.臺北市").show();
+			$("#councilor-map .region-info.臺北市").show();
+			return;
+		}
+		function drawPartialDonut(wrapper, ringLists){
+			var w=380, h=145, r={inner: 195, outer: 295};
+			var angle={start: -Math.PI*0.22, end: Math.PI*0.22};
+
+			var svg = wrapper.append("svg")
+					.attr("width", "" + w + "px")
+					.attr("height", "" + h + "px")
+				.append("g")
+					.attr("transform", "translate("+(w/2)+","+(r.outer)+")");			
+			var pie = d3.layout.pie().sort(null).value(function(d){ return 1; });
+			var gs = svg.selectAll("g").data(ringLists)	.enter().append("g");
+			donutPaths = gs.selectAll("path")
+					.data(function(d){ return pie(d); })
+				.enter().append("path")
+					.attr("d", function(d, i, j){
+						var grid = (r.outer-r.inner)/ringLists.length;
+						return d3.svg.arc()
+								.startAngle(angle.start+d.startAngle*(angle.end-angle.start)/(2*Math.PI))
+								.endAngle(angle.start+d.endAngle*(angle.end-angle.start)/(2*Math.PI))
+								.innerRadius(r.inner+grid*j)
+								.outerRadius(r.inner+grid*(j+1))();
+					})
+					.on("mouseover",mouseoverSeats)
+					.on("mousemove",mousemoveSeats)
+					.on("mouseout",mouseoutSeats)
+					.style("fill", "white")
+					.style("stroke", "white")
+					.style("fill", function(d){ 
+						if( d.data["政黨"]==undefined ) return "transparent";
+							return partyToColor(d.data["政黨"]); 
+						})
+						.style("stroke", function(d){
+							if( d.data["政黨"]==undefined ) return "transparent";
+							return "white";
+						})
+		}
+		function genRingLists(wrapper, data){
+			var numOfDonuts = data.length < 5 ? 1 : 5;
+			var groups = _.groupBy(data, function(d){ return d["政黨"]; })
+			var partys = _.sortBy(_.keys(groups), function(d){ return groups[d].length; });
+			var concat = _.reduceRight(partys, function(memo, v){ return memo.concat(groups[v]); }, []);
+
+			var w = Math.ceil(concat.length / numOfDonuts);
+			var lists = [];
+			for( var i=0; i<numOfDonuts; i++ )lists[i] = [];
+			while(concat.length % numOfDonuts!=0) concat.push({});
+			for( var i=0; i<concat.length; i++ )
+				lists[i%numOfDonuts].push(concat[i]);
+			return lists;
+		}
+		function appendTooltip(wrapper){
+			d3.csv("csv/county_mayor_result.csv", function(error, data){
+				var countysData = _.groupBy(data, function(row){ return row["縣市"] });
+				var countyNames = _.keys(countysData)
+				
+				countyInfos = wrapper.selectAll(".region-info")
+					.data(countyNames)
+					.enter().append("div")
+						.attr("class", function(d){ return "region-info "+d.slice(0,3);	})
+						.style("display", "none")
+						.each(function(d){ 
+							d3.select(this).append("div")
+								.attr("class", "region-title")
+								.html(d+"長參選人");
+							fillCountyInfo(d3.select(this), countysData[d])
+						})
+				
+				// draw color on map
+				animateCountyMap();
+			});
+		}
+		function fillCountyInfo(wrapper, data){
+			if(data.length==0) return;
+
+			var tile = {w: 278, h: 28, margin: 26};
+			var thead = {w: 278, h: 36, margin: 26};
+
+			// region-table
+			var table = wrapper.append("div")
+				.attr("class", "region-table")
+
+			// region-thead
+			var columns = '<div class="party">政黨</div>'
+						+'<div class="name">候選人</div>'
+						+'<div class="votes">得票數</div>'
+						+'<div class="pct">得票率</div>'
+						+'<div class="gender">性別</div>';
+			table.append("div")
+				.attr("class", "region-thead")
+				.html(columns)
+				.style("width", "" + thead.w + "px")
+				.style("height", "" + thead.h + "px")
+				.style("line-height", "" + thead.h + "px")
+
+			// candidate-result
+			var rows = table.selectAll(".candidate-result")
+				.data(data)
+				.enter().append("div")
+					.attr("class", "candidate-result")
+					.style("width", "" + tile.w + "px")
+					.style("height", "" + tile.h + "px")
+
+			var cells = rows.selectAll("div")
+				.data(function(candidate){
+					var postfix;
+					if(candidate["當選註記"]==="*")  postfix = '_white.png">';
+					else postfix = '_gray.png">';
+					
+					return [{column: 'party', value: '<img src="img/flag/'+candidate['政黨']+'.png">'},
+							{column: 'name', value: candidate['候選人']},
+							{column: 'votes', value: candidate['得票數']},
+							{column: 'pct', value: candidate['得票率']+"%"},
+							{column: 'gender', value: '<img src="img/icon/'+candidate['性別']+postfix}];
+				})
+				.enter().append("div")
+					.attr("class", function(d){ return d.column })
+					.html(function(d){ return d.value; });
+		}
+		function appendRegionInfos(wrapper){
+			d3.csv("csv/county_councilor_result.csv", function(error, data){
+				var regionsData = _.groupBy(data, function(row){ 
+					return row["縣市"]+" 第"+row["選區"]+"選區" 
+				});
+				var regionNames = _.keys(regionsData)
+				
+				wrapper.selectAll(".region-info")
+					.data(regionNames)
+					.enter().append("div")
+						.attr("class", function(d){ return "region-info "+d.slice(0,3);	})
+						.style("display", "none")
+						.each(function(d){ 
+							d3.select(this).append("div")
+								.attr("class", "region-title")
+								.html(d);
+							fillRegionTable(d3.select(this), regionsData[d]);
+						})
+				drawSeatsGraph(_.filter(data, function(d){ return d["當選註記"]==="*"; }));
+			});
+		}
+		function fillRegionTable(wrapper, data){
+			if(data.length==0) return;
+
+			var tile = {w: 278, h: 28, margin: 26};
+			var thead = {w: 278, h: 36, margin: 26};
+
+			// region-table
+			var table = wrapper.append("div")
+				.attr("class", "region-table")
+				.style("height", (Math.ceil(data.length/2) * tile.h + thead.h).toString()+"px")
+
+			// region-thead
+			var columns = '<div class="party">政黨</div>'
+						+'<div class="name">候選人</div>'
+						+'<div class="votes">得票數</div>'
+						+'<div class="pct">得票率</div>'
+						+'<div class="gender">性別</div>';
+			table.selectAll(".region-thead")
+				.data([columns, columns])
+				.enter().append("div")
+					.attr("class", "region-thead")
+					.html(function(html){ return html; })
+					.style("width", "" + thead.w + "px")
+					.style("height", "" + thead.h + "px")
+					.style("line-height", "" + thead.h + "px")
+					.style("top", "0px")
+					.style("left", function(d, i){ 
+						return ""+((i%2)*(thead.w + thead.margin))+"px"; 
+					})
+
+			// candidate-result
+			var rows = table.selectAll(".candidate-result")
+				.data(data)
+				.enter().append("div")
+					.attr("class", "candidate-result")
+					.style("width", "" + tile.w + "px")
+					.style("height", "" + tile.h + "px")
+					.style("left", function(d, i){return ""+((i%2)*(tile.w+tile.margin))+"px";})
+					.style("top", function(d, i){ return ""+(Math.floor(i/2) * tile.h+thead.h)+"px"; })
+			rows.selectAll("div")
+				.data(function(candidate){
+					return [{column: 'party', value: '<img src="img/flag/'+candidate['政黨']+'.png">'},
+							{column: 'name', value: candidate['候選人']},
+							{column: 'votes', value: candidate['得票數']},
+							{column: 'pct', value: candidate['得票率']+"%"},
+							{column: 'gender', value: '<img src="img/icon/'+candidate['性別']+'_gray.png">'}];
+				})
+				.enter().append("div")
+					.attr("class", function(d){ return d.column })
+					.html(function(d){ return d.value; });
+		}
+		function makeMap(wrapper, data, projection){
+			var g = wrapper.append("svg")
+				.append("g")
+
+			// load data with topojson.js
+			var topo = topojson.feature(data, data.objects["tw-county-2014"]);
+			var mesh = topojson.mesh(data, data.objects["tw-county-2014"])
+
+			// prepare a Mercator projection
+			var path = d3.geo.path().projection(projection);
+
+			// draw county area
+			g.selectAll("path")
+				.data(topo.features, function(d){ return d.properties.COUNTY; })
+				.enter().append("path")
+					.attr("d", path)
+					.attr("class", function(d){	return "county-area "+d.properties.COUNTY; })
+					.style("opacity", 0.7)
+					.on("click",clicked)
+					.on("mouseover",mouseoverEvent)
+					.on("mousemove",mousemoveEvent)
+					.on("mouseout",mouseoutEvent)
+					
+			// draw county boundary
+			g.append("path")
+				.datum(mesh)
+				.attr("d", path)
+				.attr("class", "county-boundary");
+
+		}
+		function zoomed(g) {
+			g.attr("transform", "translate("+d3.event.translate+") scale("+ d3.event.scale+")");
+		}
+		function mouseoverEvent(d){ 
+			if( d3.select(this).node()===d3.select("#mayor-map ."+d.properties.COUNTY).node() ||
+				d3.select(this).node().isSameNode(d3.select("#mayor-map ."+d.properties.COUNTY).node()) ){
+				d3.select("#mayor-tooltip").style("display", "block")
+				d3.select("#mayor-map ."+d.properties.COUNTY).style("opacity", 1.0)
+				d3.select("#mayor-tooltip ."+d.properties.COUNTY).style("display", "block")		
+			}
+		}		
+		function mousemoveEvent(d){ 
+			if( d3.select(this).node()===d3.select("#mayor-map ."+d.properties.COUNTY).node() ||
+				d3.select(this).node().isSameNode(d3.select("#mayor-map ."+d.properties.COUNTY).node()) ){
+				d3.select("#mayor-tooltip")
+					.style("top", (d3.event.pageY) + "px")
+					.style("left", (d3.event.pageX+50) + "px")
+			}
+		}
+		function mouseoutEvent(d){ 
+			if( d3.select(this).node()===d3.select("#mayor-map ."+d.properties.COUNTY).node() ||
+				d3.select(this).node().isSameNode(d3.select("#mayor-map ."+d.properties.COUNTY).node()) ){
+				d3.select("#mayor-tooltip ."+d.properties.COUNTY).style("display", "none")
+				d3.select("#mayor-map ."+d.properties.COUNTY).style("opacity", 0.7)
+				d3.select("#mayor-tooltip").style("display", "none")
+			}
+		}
+		function clicked(d){ 
+			// click county on .councilor-map (add version)
+			//var regionInfo = $("#councilor-result .region-info."+d.properties.COUNTY);
+			//if( regionInfo.css("display")==="none" )
+			//	regionInfo.remove().appendTo($("#councilor-result"));
+			//regionInfo.toggle(400);
+			
+			d3.selectAll("#councilor-map path.county-area").style("fill", "black");
+			$("#councilor-section li").css("background", "transparent");
+			d3.selectAll("#councilor-map path.county-area."+d.properties.COUNTY).style("fill", "gold");
+			
+			$("#councilor-result .region-info").hide();
+			$("#councilor-result .region-info."+d.properties.COUNTY).toggle(400);
+			
+			// councilor-party-seats
+			$("#councilor-result #party-seats-title").text(d.properties.COUNTY+"議員席次分配")
+			$("#councilor-result .councilor-party").hide();
+			var partySeats = $("#councilor-result .councilor-party."+d.properties.COUNTY);
+
+			partySeats.show(400);
+		}
+		function mouseoverSeats(d){
+			if( !d.data.hasOwnProperty("候選人") ) return ;
+			d3.select("#councilor-tooltip").style("display","block");
+			$("#councilor-tooltip").html(d.data["政黨"]+" "+d.data["候選人"]);
+		}
+		function mousemoveSeats(d){
+			d3.select("#councilor-tooltip")
+				.style("top", (d3.event.pageY) + "px")
+				.style("left", (d3.event.pageX+20) + "px")
+		}
+		function mouseoutSeats(d){
+			d3.select("#councilor-tooltip").style("display","none");
+			$("#councilor-tooltip").html("");
+		}
+		function partyToColor(party){
+			switch(party){
+				case "中國國民黨": return "#000094";
+				case "民主進步黨": return "#009A52";
+				case "新黨": return "#FFDB00";
+				case "綠黨": return "#8FC31F";
+				case "親民黨": return "#E77919";
+				case "台灣團結聯盟": return "#A25B09";
+				case "無黨團結聯盟": return "#C20F51";
+				case "臺灣建國黨": return "#31B2EA";
+				case "無黨籍及未經政黨推薦": return "#A0A0A0";
+				default: return "black";
+			}
+		}
+		
+		function animateCountyMap(){
+			d3.selectAll("#mayor-map .county-area").style("fill", "black");
+
+			// draw color on map		
+			countyInfos.selectAll(".candidate-result")
+				.style("background", function(d){
+					if( d["當選註記"]==="*" ){ 
+						var color = partyToColor(d["政黨"]);
+						d3.select("#mayor-map ."+d["縣市"])
+							.transition().duration(1250).style("fill", color)
+						d3.select(this).style("color", "white")
+						return color; 
+					}
+				})
+		}
+	</script>
+	</html>
