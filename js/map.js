@@ -1,58 +1,34 @@
 function mouseover(){
-
 	var myElement = document.querySelector("#svg1");
         var rect = myElement.getBoundingClientRect();
 	var tooltip_line_length = 80;
 	d3.select(this)
 		.style("opacity","0.5");
 	var centroid;
-	var party;
-	var elected;
-	var candidate;
 	var name;
-	
+	var party = [];
+	var elected = [];
+	var p_name = [];
 	d3.select(this)
 		.each(function(d){
 			centroid = path.centroid(d);
 			name = d.properties.town;
-			party = d.properties.party[now_map];
-			elected = d.properties.elected[now_map];
-			candidate = d.properties.candidate[now_map];
-			d3.select("#mayor-tooltip ."+d.properties.county).style("display", "block")
+			for(var i=0;i<d.properties.data_year[now_map].party_list.length;i++){
+			party.push(d.properties.data_year[now_map].party_list[i].party_name);
+			elected.push(d.properties.data_year[now_map].party_list[i].rate);
+			p_name.push(d.properties.data_year[now_map].party_list[i].name);
+			}
+			
 		});
+	
 	var x = centroid[0]+rect.left;
 	var y = centroid[1]+rect.top;
-	var tile = {w: 278, h: 28, margin: 26};
-        var thead = {w: 278, h: 36, margin: 26};
-	d3.select("#mayor-tooltip")
-		.style("display","block")
-		.style("left",x)
-		.style("top",y)
-	var table = d3.select("#mayor-tooltip")
-		.append("div")
-		.attr("class","region-table");
-	var columns = '<div class="party">政黨</div>'
-                                                +'<div class="name">候選人</div>'
-                                                +'<div class="votes">得票數</div>'
-                                                +'<div class="pct">得票率</div>'
-                                                +'<div class="gender">性別</div>';
-	table.append("div")
-		.attr("class","region-thead")
-		.html(columns)
-		.style("width",""+thead.w+"px")
-		.style("height","" + thead.h+"px")
-		.style("line-height","" + thead.h + "px");
-	var rows = table.selectAll(".candidate-result")
-			.data(json.features)
-			.enter().append("div")
-			.attr("class","candidate-result")
-			.style("width","" + tile.w + "px")
-			.style("height","" + tile.h + "px");
-	/*
+	
 	d3.select("#tooltip1")
 		.style("display","block")
-		.style("top",y)
-		.style("left",x-200-tooltip_line_length);
+		.style("top",y+'px')
+		.style("left",x+tooltip_line_length+'px');
+	
 	d3.select("#tooltip_captain")
 		.html(name);
 	d3.select("#tooltip_table")
@@ -60,32 +36,40 @@ function mouseover(){
                         .attr("id","tr_title");
 	d3.select("#tr_title")
 		.append("td")
+		.html("候選人");
+	d3.select("#tr_title")
+		.append("td")
 		.html("政黨");
 	d3.select("#tr_title")
                 .append("td")
                 .html("當選人數比例");
+	
 	for(var i=0;i<party.length;i++){
 		d3.select("#tooltip_table")
 			.append("tr")
 			.attr("id","tr" + i.toString());
 		d3.select("#tr"+i.toString())
 			.append("td")
+			.html(p_name[i]);
+		d3.select("#tr"+i.toString())
+			.append("td")
 			.html(party[i]);
 		d3.select("#tr"+i.toString())
 			.append("td")
 			.html(elected[i].toString()+"%");
-	}
-	*/	
+	}	
+	//alert(party);
+	
 }
 function mouseout(){
-	/*	
+	
 	d3.select("#tooltip1")
 		.style("display","none");
 	var myNode = document.getElementById("tooltip_table");
 	while (myNode.firstChild) {
     		myNode.removeChild(myNode.firstChild);
 	}
-	*/
+	
 	d3.select(this)
                 .style("opacity","1.0");
 }
@@ -283,6 +267,8 @@ function set_play_onclick(svg,img,json1,json2){
                                 .enter()
                                 .append("path")
                                 .attr("d",path)
+				.on("mouseover",mouseover)
+				.on("mouseout",mouseout)
                                 .style("fill",function(d){
      		                           return d.properties.color[now_map];
                                 });
