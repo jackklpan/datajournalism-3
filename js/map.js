@@ -245,6 +245,7 @@ function move(elem,svg,json1){
 		for(var i=0;i<labels.length;i++){
 			if(i*(con_width/(labels.length-1))<=left && left<(i+1)*(con_width/(labels.length-1))){
 				now_map = i;
+				set_events(now_map);
 				if(labels[i]>=2010){
 					
 					svg.selectAll("path")	
@@ -274,6 +275,7 @@ function set_play_onclick(svg,img,json1,json2){
 	var con_width = 400;
 	d3.select("#play")
 		.on("click",function(){
+			now_map = 0
 			svg.selectAll("path")	
 				.remove();		
 			svg.selectAll("path")
@@ -284,6 +286,7 @@ function set_play_onclick(svg,img,json1,json2){
                                 .style("fill",function(d){
      		                           return d.properties.color[now_map];
                                 });
+			set_events(now_map);
 			move(img,svg,json1);
 		});
 	d3.select("#turn_left")
@@ -292,7 +295,7 @@ function set_play_onclick(svg,img,json1,json2){
 				now_map -= 1;
 				img.style.left = now_map*(con_width/(labels.length-1)) +"px";
 				if(labels[now_map]<2010){
-					
+					set_events(now_map);
 					svg.selectAll("path")	
 						.remove();
 					
@@ -308,6 +311,7 @@ function set_play_onclick(svg,img,json1,json2){
 						.on("mouseout",mouseout);
 				}
 				else{
+					set_events(now_map);
 					set_color(svg,labels[now_map]);
 				}
 			}
@@ -316,6 +320,7 @@ function set_play_onclick(svg,img,json1,json2){
                 .on("click",function(){
                         if(now_map < labels.length-1){
                                 now_map += 1;
+				set_events(now_map);
                                 img.style.left = now_map*(con_width/(labels.length-1)) +"px";
 				if(labels[now_map]>=2010){
 					
@@ -352,7 +357,10 @@ function set_player(svg,json1,json2){
 	document.querySelector("#bar_container").appendChild(img);
 	move(img,svg,json1);
 	set_play_onclick(svg,img,json1,json2);
+	var tmp_sum = 0;
+	
 	for(var i=0;i<year_list.length;i++){
+		var events =[['第 01 屆直轄市市長、市議員選舉','第 10 屆 台灣省議員選舉'],['第 13 屆 縣(市)長選舉'],['第 02 屆 直轄市市長、市議員選舉','第 04 屆 立法委員選舉','第 14 屆 縣(市)議員選舉','第 13 屆 鄉鎮(縣轄市)長選舉'],['第 05 屆 立法委員選舉','第 14 屆 縣(市)長選舉'],['第 03 屆 直轄市市長、市議員選舉','第 15 屆 縣(市)議員選舉','第 14 屆 鄉鎮(縣轄市)長選舉'],['第 15 屆 縣(市)長選舉','第 16 屆 縣(市)議員選舉','第 15 屆 鄉鎮(縣轄市)長選舉'],['第 04 屆 直轄市市長、市議員選舉'],['第 16 屆 縣(市)長選舉','第 17 屆 縣(市)議員選舉','第 16 屆 鄉鎮(縣轄市)長選舉'],['第 05 屆 直轄市台北市長選舉','第 11 屆 台北市議員選舉','第 01 屆 直轄市新北、台中、台南、高雄市長、市議員選舉'],['九合一選舉']]; 
 		//alert(i*(con_width/(labels.length-1)));
 		d3.select("#label_container")
 			.append("span")
@@ -360,5 +368,18 @@ function set_player(svg,json1,json2){
 			.style("position","absolute")
 			.style("left",i*(con_width/(labels.length-1))+"px")
 			.html(labels[i]);
+	}
+	
+}
+function set_events(num){
+	var myNode = document.getElementById("events_container");
+	while (myNode.firstChild) {
+    		myNode.removeChild(myNode.firstChild);
+	}
+	var events =[['第 01 屆直轄市市長、市議員選舉','第 10 屆 台灣省議員選舉'],['第 13 屆 縣(市)長選舉'],['第 02 屆 直轄市市長、市議員選舉','第 04 屆 立法委員選舉','第 14 屆 縣(市)議員選舉','第 13 屆 鄉鎮(縣轄市)長選舉'],['第 05 屆 立法委員選舉','第 14 屆 縣(市)長選舉'],['第 03 屆 直轄市市長、市議員選舉','第 15 屆 縣(市)議員選舉','第 14 屆 鄉鎮(縣轄市)長選舉'],['第 15 屆 縣(市)長選舉','第 16 屆 縣(市)議員選舉','第 15 屆 鄉鎮(縣轄市)長選舉'],['第 04 屆 直轄市市長、市議員選舉'],['第 16 屆 縣(市)長選舉','第 17 屆 縣(市)議員選舉','第 16 屆 鄉鎮(縣轄市)長選舉'],['第 05 屆 直轄市台北市長選舉','第 11 屆 台北市議員選舉','第 01 屆 直轄市新北、台中、台南、高雄市長、市議員選舉'],['九合一選舉']];
+	for(var i=0;i<events[num].length;i++){
+		d3.select("#events_container")
+			.append("div")
+			.text(events[num][i]);
 	}
 }
