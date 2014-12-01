@@ -357,12 +357,17 @@
 		<script>
 		var margin_map = {'2010' : { kmt : [-8.45,-2.26,-8.6157,-7.775,-4.69,-28.75], dpp : [7.91,3.09,7.3724,9.82,12.435,3.39]}, 2014 : { kmt : [-14.83,-2.55,-4.2543,-8.18,-12.49,10.37], dpp : [15.26,1.39,5.3076,8.18,12.49,15.29]}};
 
+		function checkSign(rate){
+			if (rate >= 0)return "+" + rate;
+			return rate;
+		}
+
 		function drawMargin(year){
 			var y = "" + year;
 			var coefficient = 140/28.75;
 			for (var i = 0;i < margin_map[y].kmt.length;i++){
 					var w = Math.abs(margin_map[y].kmt[i]*coefficient);
-					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "國民黨得票率:"+margin_map[y]['kmt'][i]+"%"});
+					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "國民黨得票率:"+checkSign(margin_map[y]['kmt'][i])+"%"});
 					if (margin_map[y]['kmt'][i] < 0){
 						$("#kmt-"+i).css("left" , (parseInt($("#kmt-"+i).attr("data-left")) - w+10) +"px");
 						$("#kmt-"+i + ">div").removeClass("positive").addClass("negative");
@@ -373,7 +378,7 @@
 				}
 				for (var i = 0;i < margin_map[y].dpp.length;i++){
 					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
-					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "在野得票率:"+margin_map[y]['dpp'][i]+"%"});
+					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "在野得票率:"+checkSign(margin_map[y]['dpp'][i])+"%"});
 					if (margin_map[y]['dpp'][i] < 0){
 						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
 						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
