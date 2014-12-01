@@ -154,24 +154,23 @@
 			}
 			#mayor-section, #councilor-section {
 				width: 980px;
-				min-height: 1000px;
 				margin: 0 auto;
 				padding-top: 60px
 			}
 			#mayor-map {
 				margin-top: 42px;
 			}
-			#mayor-title, #councilor-title {
+			#mayor-title, #councilor-title,#difference-title {
 				height: 55px; 
 				border-bottom: 1px solid #a0a0a0;
 			}
-			#mayor-title > .zh-title, #councilor-title > .zh-title {
+			#mayor-title > .zh-title, #councilor-title > .zh-title, #difference-title > .zh-title {
 				font-size: 28pt; 
 				vertical-align: middle; 
 				font-weight: bold; 
 				color: #505050
 			}
-			#mayor-title > .en-title, #councilor-title > .en-title {
+			#mayor-title > .en-title, #councilor-title > .en-title,#difference-title > .en-title {
 				position: absolute;
 				right: 0px;
 				bottom: 6px;
@@ -453,6 +452,10 @@
 				
 		</div>
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
+			<div id="difference-title">
+				<img class="logo" src="img/icon/logo.png" alt="logo">
+				<span class="zh-title">九合一民進黨得票率全面提升　國民黨卻只剩高雄成長</span>				
+			</div>		
 			<div id="difference-map" style="position:relative;z-index:2000">
 				<svg id="diffenence-svg"></svg>
 				<div style="position:absolute;top:100px;left:250px;"class="btn-group" data-toggle="buttons">
