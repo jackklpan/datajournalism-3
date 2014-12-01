@@ -863,7 +863,7 @@
 				.data(topo.features, function(d){ return d.properties.COUNTY; })
 				.enter().append("path")
 					.attr("d", path)
-					.attr("class", function(d){	return "county-area diffenence-map "+d.properties.COUNTY; })
+					.attr("class", function(d){	return ""+d.properties.COUNTY; })
 					.style("opacity", 0.7);
 					// .style("fill", "white")
 					// .style("stroke", "black");
