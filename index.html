@@ -331,7 +331,7 @@
 			var coefficient = 140/28.75;
 			for (var i = 0;i < margin_map[y].kmt.length;i++){
 					var w = Math.abs(margin_map[y].kmt[i]*coefficient);
-					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : margin_map[y]['kmt'][i]+"%"});
+					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "國民黨得票率:"+margin_map[y]['kmt'][i]+"%"});
 					if (margin_map[y]['kmt'][i] < 0){
 						$("#kmt-"+i).css("left" , (parseInt($("#kmt-"+i).attr("data-left")) - w+10) +"px");
 						$("#kmt-"+i + ">div").removeClass("positive").addClass("negative");
@@ -342,7 +342,7 @@
 				}
 				for (var i = 0;i < margin_map[y].dpp.length;i++){
 					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
-					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : margin_map[y]['dpp'][i]+"%"});
+					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "民進黨得票率:"+margin_map[y]['dpp'][i]+"%"});
 					if (margin_map[y]['dpp'][i] < 0){
 						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
 						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
@@ -394,40 +394,40 @@
 				    <input class="difference-radio-btn" type="radio" name="options"  autocomplete="off">2010年
 				  </label>
 				</div>
-				<div id="kmt-0" data-left="630" style="position:absolute;top:170px;">
+				<div id="kmt-0" data-left="630" style="position:absolute;top:180px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-0" data-left="630" style="position:absolute;top:180px;">
+				<div id="dpp-0" data-left="630" style="position:absolute;top:190px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-1" data-left="640" style="position:absolute;top:195px;">
+				<div id="kmt-1" data-left="640" style="position:absolute;top:205px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-1" data-left="640" style="position:absolute;top:205px;">
+				<div id="dpp-1" data-left="640" style="position:absolute;top:215px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-2" data-left="590" style="position:absolute;top:200px;">
+				<div id="kmt-2" data-left="590" style="position:absolute;top:205px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-2" data-left="590"style="position:absolute;top:210px;">
+				<div id="dpp-2" data-left="590"style="position:absolute;top:215px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-3" data-left="540"style="position:absolute;top:300px;">
+				<div id="kmt-3" data-left="540"style="position:absolute;top:310px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-3" data-left="540"style="position:absolute;top:310px;">
+				<div id="dpp-3" data-left="540"style="position:absolute;top:320px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-4" data-left="460"style="position:absolute;top:450px;">
+				<div id="kmt-4" data-left="460"style="position:absolute;top:460px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-4" data-left="460" style="position:absolute;top:460px;">
+				<div id="dpp-4" data-left="460" style="position:absolute;top:470px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-5" data-left="520"style="position:absolute;top:470px;">
+				<div id="kmt-5" data-left="520"style="position:absolute;top:480px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-5" data-left="520"style="position:absolute;top:480px;">
+				<div id="dpp-5" data-left="520"style="position:absolute;top:490px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
 			</div>
