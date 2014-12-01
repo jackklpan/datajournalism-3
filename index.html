@@ -342,7 +342,7 @@
 				}
 				for (var i = 0;i < margin_map[y].dpp.length;i++){
 					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
-					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "民進黨得票率:"+margin_map[y]['dpp'][i]+"%"});
+					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "在野得票率:"+margin_map[y]['dpp'][i]+"%"});
 					if (margin_map[y]['dpp'][i] < 0){
 						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
 						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
