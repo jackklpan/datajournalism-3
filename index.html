@@ -22,6 +22,12 @@
 		
 
 		<style>
+			.title{ font-size: 28px; }
+			.sm-text-en{	font-size: 15px;	}
+			.bg-text-en{	font-size: 24px;	}
+			.sm-text-ch{	font-size: 10px;	}
+			.md-text-ch{	font-size: 15px;	}
+			.bg-text-ch{ 	font-size: 18px;	}
 			* {
 				position: relative;
 				-webkit-box-sizing: border-box;
@@ -141,7 +147,7 @@
 				max-height: 20px;
 			}
 			#mayor-section, #councilor-section {
-				width: 960px;
+				width: 980px;
 				min-height: 1000px;
 				margin: 0 auto;
 				padding-top: 60px
@@ -204,16 +210,6 @@
 				height: 300px;
 				max-height: 300px;
 				overflow-y: auto;
-			}
-			#councilor-section ul li{
-				cursor: pointer; 
-				display: inline-block; 
-				
-				box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.35);
-				margin: 0 5px;
-			}
-			#councilor-map {
-				opacity: 1.0;
 			}
 			svg{
                         margin: 10px auto;
@@ -376,6 +372,20 @@
 		</script>
 	</head>
 	<body>
+	<div width="980px" style="width:980px; margin:0 auto">
+	<h5 style="text-align:right; color:gray">
+					記者 陳貞樺、蔣宜婷<br/>
+					製作 洪立遠、潘冠綸、吳旻誠<br/>
+					資料來源 中央選舉委員會
+	</h5>
+	<center><img src="img/cover_index.png" /></center>
+	
+	<div id="councilor-section">
+			<div id="councilor-title">
+				<img class="logo" src="img/icon/logo.png" alt="logo">
+				<span class="zh-title"></span>
+			</div>
+		
 		<div class="article_container" id="article_container">
                         <p style="font-size:30px;">桃園市歷年村里長政黨變化圖</p>
                         <p>
@@ -393,9 +403,12 @@
                         </div>
 			<div id="events_container">
 			</div>
-                </div>
-                <svg id="svg1">
-                </svg>
+        </div>
+        <svg id="svg1">
+        </svg>
+				
+		</div>
+		
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
 			<div id="difference-map" style="position:relative;z-index:2000">
 				<svg id="diffenence-svg"></svg>
@@ -458,30 +471,7 @@
 			
 			<div id="mayor-map"></div>
 		</div>
-
-		<div id="councilor-section">
-			<div id="councilor-title">
-				<img class="logo" src="img/icon/logo.png" alt="logo">
-				<span class="zh-title">2014 臺灣縣市議員選舉結果</span>
-				<span class="en-title">NINE-IN-ONE ELECTIONS</span>
-			</div>
-			<div>資料來源：中選會</div>
-			<div id="councilor-map"></div>
-			<ul>
-				<li class="澎湖縣">澎湖縣</li>
-				<li class="金門縣">金門縣</li>
-				<li class="連江縣">連江縣</li>
-			</ul>
-			<div id="councilor-result">
-				<div id="councilor-seats">
-					<div id="party-seats-title"></div>
-				</div>
-				<div id="councilor-info-wrapper"></div>
-			</div>
-		</div>
-		
-		<div id="mayor-tooltip"></div>
-		<div id="councilor-tooltip"></div>
+	</div>
 	</body>
 	<script>
 		 var width = 600;
