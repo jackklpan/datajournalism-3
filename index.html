@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script>
+			var now_map = 0;
+                        var play_bar = new image();
+                        play_bar.src = "play_bar.png";
+                        var labels;
+		</script>
 		<meta charset="utf-8">
 		<title>2014九合一選舉</title>
 		<script src="js/d3.js"></script>
@@ -8,6 +14,7 @@
 		<script src="js/jquery-1.11.1.js"></script>
 		<script src="js/underscore.js"></script>
 		<script src="js/queue.v1.js"></script>
+		<script src="js/map.js"></script>
 		<style>
 			* {
 				position: relative;
@@ -189,9 +196,71 @@
 			#councilor-map {
 				opacity: 1.0;
 			}
+			svg{
+                        margin: 10px auto;
+                	}
+                	path {
+                        	stroke:white;
+                        	fill: grey;
+                        	stroke-width:1px;
+                        	opacity:1.0;
+                	}
+			.bar_container{
+                        	height:30px;
+                        	width:400px;
+                	}
+			#label_container{
+				width:400px;
+			}
+                	.play_bar{
+                        	z-index:1;
+                        	margin: 0px auto;
+                       		position:relative;
+                        	top:15px;
+                        	height:5px;
+                        	width:400px;
+                        	display:block;
+                        	background:#AAA;
+                	}
+                	.bar_container img{
+                        	position:relative;
+                        	z-index:3;
+                	}
+                	.axis path,
+                	.axis line {
+                        	fill:none;
+                        	stroke: #000;
+                        	shape-rendering: crispEdges;
+                	}
+                	#article_container{
+                        	margin: 0px auto;
+                        	width:430px;
+                        	position:absolute;
+                        	left:700px;
+                	}
+
+
 		</style>
 	</head>
 	<body>
+		<div class="article_container" id="article_container">
+                        <p style="font-size:30px;">桃園市歷年村里長政黨變化圖</p>
+                        <p>
+                                左圖為民國79年到99年桃園縣各鄉鎮的村里長政黨多數比例圖，以該地區當年村里長當選人的多數政黨為顯示顏色，藍色代表國
+民黨，綠色代表民進黨，灰色代表無黨籍。
+                        </p>
+                        <button id="play">Play</button>
+                        <button id="turn_left"> &lt;</button>
+                        <button id="turn_right"> &gt;</button>
+                        <div class="bar_container" id="bar_container">
+                                <div class="play_bar" id="play_bar">
+                                </div>
+                        </div>
+                        <div id="label_container">
+                        </div>
+                </div>
+                <svg id="svg1">
+                </svg>
 		<div id="mayor-section">
 			<div id="mayor-title">
 				<img class="logo" src="img/icon/logo.png" alt="logo">
@@ -227,6 +296,37 @@
 		<div id="councilor-tooltip"></div>
 	</body>
 	<script>
+		 var width = 600;
+                        var height = 800;
+                        var svg = d3.select("#svg1")
+                                        .attr("width", width)
+                                        .attr("height", height);
+                        var prj = d3.geo.mercator().center([121.75, 24.6]).scale(7500);
+                        var path = d3.geo.path()
+                                        .projection(prj);
+                        
+                        var g = svg.append("g");
+                        d3.csv('csv/party_taiwan.csv',function(csv){
+                                d3.json("json/twcounty2010.json", function(json1) {
+                                         d3.json("json/twcounty1984.json", function(json2) {
+                                                labels = unique_year(csv);      
+                                                bind_data(json1,json2,csv);
+                                        calculate_color(json1);
+                                        calculate_color(json2);
+                                        
+                                        //alert(json2.features[0].properties.color);
+                                        var map = svg.selectAll("path")
+                                                .data(json2.features)
+                                                .enter()
+                                                .append("path")
+                                                .attr("d",path)
+                                                .style("fill",function(d){
+                                                        return d.properties.color[0];
+                                                });
+                                        set_player(svg,json1,json2);
+                                        });
+                                });
+                        });
 		var countyInfos, donutPaths;
 		d3.json("json/tw-county-2014.topo.json", function(error, data){
 			if (error) return console.error(error);
