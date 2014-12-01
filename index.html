@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script>
+			// var now_map = 0;
+   //                      var play_bar = new image();
+   //                      play_bar.src = "play_bar.png";
+   //                      var labels;
+		</script>
 		<meta charset="utf-8">
 		<title>2014九合一選舉</title>
 		<script src="js/d3.js"></script>
@@ -243,7 +249,7 @@
                         	z-index:3;
                 	}
 			#events_container{
-				color:red;
+				color:black;
 				position:relative;
 				top:15px;
 			}
@@ -260,6 +266,28 @@
                         	left:580px;
 							top:150px;
                 	}
+			#tooltip1{
+				display:none;
+				position:absolute;	
+				width:300px;
+				border-radius:10px;
+        			box-shadow:4px 4px 10px rgba(0,0,0,0.4);
+				background:#DDD;
+			}
+			#tooltip td{
+				height:20px;
+				font-size:15px;
+				color:black;
+				background:#DDD;
+				width:322px;
+			}
+
+
+			#difference-map>div>div{
+				z-index: 1000;
+			    height: 10px;
+			    border-radius: 5px;
+			}
 
 			#difference-map div.positive{
 				animation:loadbarpositive 3s;
@@ -285,16 +313,10 @@
 			}
 			#difference-map .kmt{
 				background-color: rgb(77,77,181);
-				z-index: 1000;
-			    height: 10px;
-			    border-radius: 5px;
 			}
 
 			#difference-map .dpp{
 				background-color: rgb(77,185,134);
-				z-index: 1000;
-			    height: 10px;
-			    border-radius: 5px;
 			}
 
 			@keyframes loadbarpositive {
@@ -339,7 +361,7 @@
 			var coefficient = 140/28.75;
 			for (var i = 0;i < margin_map[y].kmt.length;i++){
 					var w = Math.abs(margin_map[y].kmt[i]*coefficient);
-					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "國民黨得票率:"+margin_map[y]['kmt'][i]+"%"});
+					$("#kmt-"+i).css("width" , w +"px");
 					if (margin_map[y]['kmt'][i] < 0){
 						$("#kmt-"+i).css("left" , (parseInt($("#kmt-"+i).attr("data-left")) - w+10) +"px");
 						$("#kmt-"+i + ">div").removeClass("positive").addClass("negative");
@@ -350,7 +372,7 @@
 				}
 				for (var i = 0;i < margin_map[y].dpp.length;i++){
 					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
-					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : "在野得票率:"+margin_map[y]['dpp'][i]+"%"});
+					$("#dpp-"+i).css("width" , w +"px");
 					if (margin_map[y]['dpp'][i] < 0){
 						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
 						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
@@ -362,6 +384,7 @@
 
 		}
 			$(document).ready(function(){
+				
 				drawMargin(2014);
 				$("label.btn-primary").click(function(){
 					drawMargin($(this).attr("data-year"));
@@ -388,11 +411,14 @@
 			</div>
 		
 		<div class="article_container" id="article_container">
-                        <p style="font-size:30px;">桃園市歷年村里長政黨變化圖</p>
+                        <p style="font-size:30px;">台灣歷年縣市長政黨變化圖</p>
                         <p>
-                                左圖為民國79年到99年桃園縣各鄉鎮的村里長政黨多數比例圖，以該地區當年村里長當選人的多數政黨為顯示顏色，藍色代表國
+                                左圖為民國83年到103年台灣的各縣市政黨多數比例圖，以該地區當年縣市長當選人的政黨為顯示顏色，藍色代表國
 民黨，綠色代表民進黨，灰色代表無黨籍。
                         </p>
+                        <p>
+			1997年到2002年國民兩黨呈現勢均力敵狀態，但到2005年後國民黨開始拿下更多縣市，到2005年後以彰化縣為界線，呈現北藍南綠的執政狀態。直到今年的九合一選舉，民進黨才拿下了台中、新竹市、基隆市等國民黨長期執政的縣市。
+			</p>
                         <button id="play">Play</button>
                         <button id="turn_left"> &lt;</button>
                         <button id="turn_right"> &gt;</button>
@@ -404,16 +430,25 @@
                         </div>
 			<div id="events_container">
 			</div>
+                </div>
+                <svg id="svg1">
+                </svg>
+		<div id="tooltip1">
+			<table border="0">
+				 <caption id="tooltip_captain" style="text-align:center;font-size:20px;"></caption>
+   				<tbody id="tooltip_table">
+   				</tbody>
+		 	</table>
+		</div>
+	
         </div>
         <svg id="svg1">
         </svg>
 				
 		</div>
-		
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
 			<div id="difference-map" style="position:relative;z-index:2000">
-				<svg id="diffenence-svg"></svg>
-				<div style="position:absolute;top:100px;left:250px;"class="btn-group" data-toggle="buttons">
+				<div style="position:absolute;top:100px;"class="btn-group" data-toggle="buttons">
 				  <label data-year="2014" class="btn btn-primary active">
 				    <input class="difference-radio-btn" type="radio" name="options" autocomplete="off" checked>2014年
 				  </label>
@@ -421,40 +456,41 @@
 				    <input class="difference-radio-btn" type="radio" name="options"  autocomplete="off">2010年
 				  </label>
 				</div>
-				<div id="kmt-0" data-left="630" style="position:absolute;top:180px;">
+				<div id="kmt-0" data-left="630" style="position:absolute;top:170px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-0" data-left="630" style="position:absolute;top:190px;">
+				<div id="dpp-0" data-left="630" style="position:absolute;top:180px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-1" data-left="640" style="position:absolute;top:205px;">
+				<div id="kmt-1" data-left="640" style="position:absolute;top:195px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-1" data-left="640" style="position:absolute;top:215px;">
+				<div id="dpp-1" data-left="640" style="position:absolute;top:205px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-2" data-left="590" style="position:absolute;top:205px;">
+
+				<div id="kmt-2" data-left="590" style="position:absolute;top:200px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-2" data-left="590"style="position:absolute;top:215px;">
+				<div id="dpp-2" data-left="590"style="position:absolute;top:210px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-3" data-left="540"style="position:absolute;top:310px;">
+				<div id="kmt-3" data-left="540"style="position:absolute;top:300px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-3" data-left="540"style="position:absolute;top:320px;">
+				<div id="dpp-3" data-left="540"style="position:absolute;top:310px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-4" data-left="460"style="position:absolute;top:460px;">
+				<div id="kmt-4" data-left="460"style="position:absolute;top:450px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-4" data-left="460" style="position:absolute;top:470px;">
+				<div id="dpp-4" data-left="460" style="position:absolute;top:460px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-5" data-left="520"style="position:absolute;top:480px;">
+				<div id="kmt-5" data-left="520"style="position:absolute;top:470px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-5" data-left="520"style="position:absolute;top:490px;">
+				<div id="dpp-5" data-left="520"style="position:absolute;top:480px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
 			</div>
@@ -811,7 +847,7 @@
 		}
 
 		function makeDifferenceMap(wrapper, data, projection){
-			var g = d3.select("#diffenence-svg")
+			var g = wrapper.append("svg")
 				.append("g")
 
 			// load data with topojson.js
@@ -826,7 +862,7 @@
 				.data(topo.features, function(d){ return d.properties.COUNTY; })
 				.enter().append("path")
 					.attr("d", path)
-					.attr("class", function(d){	return ""+d.properties.COUNTY; })
+					.attr("class", function(d){	return "county-area diffenence-map "+d.properties.COUNTY; })
 					.style("opacity", 0.7);
 					// .style("fill", "white")
 					// .style("stroke", "black");
@@ -836,8 +872,6 @@
 				.datum(mesh)
 				.attr("d", path)
 				.attr("class", "county-boundary");
-
-
 
 		}
 		function zoomed(g) {
