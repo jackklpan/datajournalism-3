@@ -481,7 +481,7 @@
                                         .projection(prj);
                         
                         var g = svg.append("g");
-                        d3.csv('csv/party_taiwan.csv',function(csv){
+                        d3.csv('csv/party_taiwan_new.csv',function(csv){
                                 d3.json("json/twcounty2010.json", function(json1) {
                                          d3.json("json/twcounty1984.json", function(json2) {
                                                 labels = unique_year(csv);      
@@ -497,7 +497,9 @@
                                                 .attr("d",path)
                                                 .style("fill",function(d){
                                                         return d.properties.color[0];
-                                                });
+                                                })
+						.on("mouseover",mouseover)
+						.on("mouseout",mouseout);
                                         set_player(svg,json1,json2);
                                         });
                                 });

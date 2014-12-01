@@ -353,12 +353,12 @@ function set_player(svg,json1,json2){
 	move(img,svg,json1);
 	set_play_onclick(svg,img,json1,json2);
 	for(var i=0;i<year_list.length;i++){
-		//alert(i*(con_width/(labels.length-1)));
 		d3.select("#label_container")
 			.append("span")
 			.style("font-size","12px")
 			.style("position","absolute")
-			.style("left",i*(con_width/(labels.length-1))+"px")
+			.style("display","block")
+			.style("left",i*(con_width/(labels.length-1)))
 			.html(labels[i]);
 	}
 }
