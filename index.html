@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<script>
-			var now_map = 0;
-                        var play_bar = new image();
-                        play_bar.src = "play_bar.png";
-                        var labels;
+			// var now_map = 0;
+   //                      var play_bar = new image();
+   //                      play_bar.src = "play_bar.png";
+   //                      var labels;
 		</script>
 		<meta charset="utf-8">
 		<title>2014九合一選舉</title>
@@ -16,9 +16,14 @@
 		<script src="js/queue.v1.js"></script>
 
 		<script src="js/map.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">		
 
-		<script src="js/jquery.keyframes.js"></script>
-		<script src="js/prefixfree.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<!-- 		// <script src="js/jquery.keyframes.js"></script>
+		// <script src="js/prefixfree.js"></script> -->
 		<!-- <script src="js/prefixfree.dynamic-dom.js"></script> -->
 		
 
@@ -219,6 +224,7 @@
                         	stroke-width:1px;
                         	opacity:1.0;
                 	}
+
 			.bar_container{
                         	height:30px;
                         	width:400px;
@@ -254,11 +260,6 @@
                 	}
 
 
-
-			#progressbar {
-
-			}
-
 			#difference-map>div>div{
 				z-index: 1000;
 			    height: 10px;
@@ -288,11 +289,11 @@
 			    -moz-animation-timing-function: linear;
 			}
 			#difference-map .kmt{
-				background-color: #000094;
+				background-color: rgb(77,77,181);
 			}
 
 			#difference-map .dpp{
-				background-color: #009A52
+				background-color: rgb(77,185,134);
 			}
 
 			@keyframes loadbarpositive {
@@ -360,30 +361,12 @@
 
 		}
 			$(document).ready(function(){
-				//drawMargin(2014);
-				drawMargin(2010);
-				drawMargin(2014);
 				
-
-
-
-				// $.keyframe.define([{
-				//     name: 'myfirst',
-				//        '0%':   {width:"0px"},
-				//     '100%': {width:"40px"}
-				// }]);
-
-				// $("#kmt-taipei").playKeyframe({
-				//     name: 'myfirst',
-				//     duration: '2s',
-				//     iterationCount: 'infinite',
-				//     timingFunction: 'ease',
-    //         		direction: 'normal',
-    //         		fillMode: 'forwards'
-
-				// },function () {
-    // 				console.log("hi")
-				// });
+				drawMargin(2014);
+				$("label.btn-primary").click(function(){
+					drawMargin($(this).attr("data-year"));
+				})
+				
 
 			});
 
@@ -409,7 +392,15 @@
                 <svg id="svg1">
                 </svg>
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
-			<div id="difference-map" style="position:relative">
+			<div id="difference-map" style="position:relative;z-index:2000">
+				<div style="position:absolute;top:100px;"class="btn-group" data-toggle="buttons">
+				  <label data-year="2014" class="btn btn-primary active">
+				    <input class="difference-radio-btn" type="radio" name="options" autocomplete="off" checked>2014年
+				  </label>
+				  <label data-year="2010" class="btn btn-primary">
+				    <input class="difference-radio-btn" type="radio" name="options"  autocomplete="off">2010年
+				  </label>
+				</div>
 				<div id="kmt-0" data-left="630" style="position:absolute;top:170px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
@@ -838,8 +829,10 @@
 				.data(topo.features, function(d){ return d.properties.COUNTY; })
 				.enter().append("path")
 					.attr("d", path)
-					.attr("class", function(d){	return "county-area "+d.properties.COUNTY; })
+					.attr("class", function(d){	return "county-area diffenence-map "+d.properties.COUNTY; })
 					.style("opacity", 0.7);
+					// .style("fill", "white")
+					// .style("stroke", "black");
 					
 			// draw county boundary
 			g.append("path")
