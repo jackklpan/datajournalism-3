@@ -39,7 +39,8 @@
 				-webkit-box-sizing: border-box;
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
-				font-family: Helvetica, Verdana, Arial, Tahoma, 微軟正黑體;
+				font-family: 微軟正黑體,Helvetica, Verdana, Arial, Tahoma;
+				font-size:18px;
 			}
 			.line{
 				width:1px;
@@ -66,7 +67,7 @@
 				height: 630px;
 			}
 			#difference-map{
-				text-align:center;				
+				text-align:left;				
 			}
 			.county-area{ 
 				cursor: pointer; 
@@ -458,7 +459,15 @@
 			</div>		
 			<div id="difference-map" style="position:relative;z-index:2000">
 				<svg id="diffenence-svg"></svg>
-				<div style="position:absolute;top:100px;left:250px;"class="btn-group" data-toggle="buttons">
+				<div style="position:absolute;width:420px;left:520px;top:50px;">
+					<p>分析2010年與2014年直轄市長的政黨投票率後發現，國民黨六都只有高雄市得票率成長，其餘直轄市的得票率都是退步。退步最多的城市為台北市，比起2010年的得票率少了14.83%，其次為台南市，減少12.49%。
+						就連這次國民黨唯一拿下的新北市，得票率也倒退了2.55%。<br />
+						<br />
+						反觀民進黨，除了台北市沒有推出候選人外，5都也拿下了4都。政黨得票率也全面增加，增加最多的為高雄市15.29%，其次為台南市增加了12.49%。新北市雖然以1.28%的得票率敗給國民黨，但比起2010年，民進黨的得票率也增加了1.39%。<br />
+					</p>
+					<img src="difference-explain.png" style="width:420px"/>
+				</div>
+				<div style="position:absolute;top:100px;left:150px;"class="btn-group" data-toggle="buttons">
 				  <label data-year="2014" class="btn btn-primary active">
 				    <input class="difference-radio-btn" type="radio" name="options" autocomplete="off" checked>2014年
 				  </label>
@@ -466,40 +475,40 @@
 				    <input class="difference-radio-btn" type="radio" name="options"  autocomplete="off">2010年
 				  </label>
 				</div>
-				<div id="kmt-0" data-left="630" style="position:absolute;top:180px;">
+				<div id="kmt-0" data-left="450" style="position:absolute;top:180px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-0" data-left="630" style="position:absolute;top:190px;">
+				<div id="dpp-0" data-left="450" style="position:absolute;top:190px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-1" data-left="640" style="position:absolute;top:205px;">
+				<div id="kmt-1" data-left="460" style="position:absolute;top:205px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-1" data-left="640" style="position:absolute;top:215px;">
+				<div id="dpp-1" data-left="460" style="position:absolute;top:215px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-2" data-left="590" style="position:absolute;top:205px;">
+				<div id="kmt-2" data-left="410" style="position:absolute;top:205px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-2" data-left="590"style="position:absolute;top:215px;">
+				<div id="dpp-2" data-left="410"style="position:absolute;top:215px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-3" data-left="540"style="position:absolute;top:310px;">
+				<div id="kmt-3" data-left="360"style="position:absolute;top:310px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-3" data-left="540"style="position:absolute;top:320px;">
+				<div id="dpp-3" data-left="360"style="position:absolute;top:320px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-4" data-left="460"style="position:absolute;top:460px;">
+				<div id="kmt-4" data-left="280"style="position:absolute;top:460px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-4" data-left="460" style="position:absolute;top:470px;">
+				<div id="dpp-4" data-left="280" style="position:absolute;top:470px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-				<div id="kmt-5" data-left="520"style="position:absolute;top:480px;">
+				<div id="kmt-5" data-left="340"style="position:absolute;top:480px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
-				<div id="dpp-5" data-left="520"style="position:absolute;top:490px;">
+				<div id="dpp-5" data-left="340"style="position:absolute;top:490px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
 			</div>
