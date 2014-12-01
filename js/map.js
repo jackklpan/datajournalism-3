@@ -1,7 +1,7 @@
 function mouseover(){
 	var myElement = document.querySelector("#svg1");
         var rect = myElement.getBoundingClientRect();
-	var tooltip_line_length = 30;
+	var tooltip_line_length = 10;
 	d3.select(this)
 		.style("opacity","0.5");
 	var centroid;
