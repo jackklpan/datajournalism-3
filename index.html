@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script>
-			// var now_map = 0;
-   //                      var play_bar = new image();
-   //                      play_bar.src = "play_bar.png";
-   //                      var labels;
-		</script>
 		<meta charset="utf-8">
 		<title>2014九合一選舉</title>
 		<script src="js/d3.js"></script>
@@ -259,13 +253,6 @@
                         	left:700px;
                 	}
 
-
-			#difference-map>div>div{
-				z-index: 1000;
-			    height: 10px;
-			    border-radius: 5px;
-			}
-
 			#difference-map div.positive{
 				animation:loadbarpositive 3s;
     			-webkit-animation:loadbarpositive 3s;
@@ -290,10 +277,16 @@
 			}
 			#difference-map .kmt{
 				background-color: rgb(77,77,181);
+				z-index: 1000;
+			    height: 10px;
+			    border-radius: 5px;
 			}
 
 			#difference-map .dpp{
 				background-color: rgb(77,185,134);
+				z-index: 1000;
+			    height: 10px;
+			    border-radius: 5px;
 			}
 
 			@keyframes loadbarpositive {
@@ -338,7 +331,7 @@
 			var coefficient = 140/28.75;
 			for (var i = 0;i < margin_map[y].kmt.length;i++){
 					var w = Math.abs(margin_map[y].kmt[i]*coefficient);
-					$("#kmt-"+i).css("width" , w +"px");
+					$("#kmt-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : margin_map[y]['kmt'][i]+"%"});
 					if (margin_map[y]['kmt'][i] < 0){
 						$("#kmt-"+i).css("left" , (parseInt($("#kmt-"+i).attr("data-left")) - w+10) +"px");
 						$("#kmt-"+i + ">div").removeClass("positive").addClass("negative");
@@ -349,7 +342,7 @@
 				}
 				for (var i = 0;i < margin_map[y].dpp.length;i++){
 					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
-					$("#dpp-"+i).css("width" , w +"px");
+					$("#dpp-"+i).css("width" , w +"px").tooltip().tooltip("destroy").tooltip({title : margin_map[y]['dpp'][i]+"%"});
 					if (margin_map[y]['dpp'][i] < 0){
 						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
 						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
@@ -361,7 +354,6 @@
 
 		}
 			$(document).ready(function(){
-				
 				drawMargin(2014);
 				$("label.btn-primary").click(function(){
 					drawMargin($(this).attr("data-year"));
@@ -393,7 +385,8 @@
                 </svg>
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
 			<div id="difference-map" style="position:relative;z-index:2000">
-				<div style="position:absolute;top:100px;"class="btn-group" data-toggle="buttons">
+				<svg id="diffenence-svg"></svg>
+				<div style="position:absolute;top:100px;left:250px;"class="btn-group" data-toggle="buttons">
 				  <label data-year="2014" class="btn btn-primary active">
 				    <input class="difference-radio-btn" type="radio" name="options" autocomplete="off" checked>2014年
 				  </label>
@@ -413,7 +406,6 @@
 				<div id="dpp-1" data-left="640" style="position:absolute;top:205px;">
 					<div style="position:relative"class="dpp"></div>
 				</div>
-
 				<div id="kmt-2" data-left="590" style="position:absolute;top:200px;">
 					<div style="position:relative"class="kmt"></div>
 				</div>
@@ -812,7 +804,7 @@
 		}
 
 		function makeDifferenceMap(wrapper, data, projection){
-			var g = wrapper.append("svg")
+			var g = d3.select("#diffenence-svg")
 				.append("g")
 
 			// load data with topojson.js
@@ -827,7 +819,7 @@
 				.data(topo.features, function(d){ return d.properties.COUNTY; })
 				.enter().append("path")
 					.attr("d", path)
-					.attr("class", function(d){	return "county-area diffenence-map "+d.properties.COUNTY; })
+					.attr("class", function(d){	return ""+d.properties.COUNTY; })
 					.style("opacity", 0.7);
 					// .style("fill", "white")
 					// .style("stroke", "black");
@@ -837,6 +829,8 @@
 				.datum(mesh)
 				.attr("d", path)
 				.attr("class", "county-boundary");
+
+
 
 		}
 		function zoomed(g) {
