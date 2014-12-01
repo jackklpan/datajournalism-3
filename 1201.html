@@ -299,7 +299,7 @@ var dictArray = {
 
 var els = document.getElementById("lineShiftSVG").getElementsByTagName("polyline");
 for (var i = 0, length = els.length; i < length; i++) {
-	els[i].onmouseenter = function(count){return function() {showToolTip(count)}}(i);
+	els[i].onmouseover = function(count){return function() {showToolTip(count)}}(i);
 }
 </script>
 

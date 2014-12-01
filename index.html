@@ -448,8 +448,6 @@
 		</div>
 	
         </div>
-        <svg id="svg1">
-        </svg>
 				
 		</div>
 		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
@@ -519,18 +517,40 @@
 		<div id="mayor-section">
 			<div id="mayor-title">
 				<img class="logo" src="img/icon/logo.png" alt="logo">
-				<span class="zh-title">2014 臺灣縣市長選舉結果</span>
-				<span class="en-title">NINE-IN-ONE ELECTIONS</span>
-			</div>		
-			<div>資料來源：中選會</div>
-			
-			<div id="mayor-map"></div>
+				<span class="zh-title">3屆直轄市長選舉 國民黨市長得票差距似乎加大</span>
+			</div>	
+			<center>
+			<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/1wOJcFhvBKbscNP5SI66ic2HsUDC7AJhUFUtcnyqMuUs/pubchart?oid=163356500&amp;format=interactive"></iframe>
+			</center>
+			<div class="md-text-ch" style="position:relative; left:180px;">註1:2005年縣市尚未合併，因此採兩城市的得票率除以二的方式計算
+			<br />
+			註2:台北市及高雄市為2006年舉行直轄市選舉
+			</div>
+			<br />
+			<div class="bg-text-ch">
+			合併了2005年的縣市長選舉以及2006年的直轄市選舉，以及2010及2014年的直轄市長選舉結果，相減算出了三年來政黨得票率的變化。可發現國民黨在台北市及台南市呈現最大負成長，差距一年比一年大，但桃園市和高雄市在今年得票差距有縮短。
+			</div>
+		</div>
+		
+		<div id="mayor-section">
+			<div id="mayor-title">
+				<img class="logo" src="img/icon/logo.png" alt="logo">
+				<span class="zh-title">社會氛圍影響總統選情 兩黨得票率最高差距達16.9%</span>
+			</div>	
+			<center>
+			<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/1wOJcFhvBKbscNP5SI66ic2HsUDC7AJhUFUtcnyqMuUs/pubchart?oid=644050067&amp;format=interactive"></iframe>
+			</center>
+			<br />
+			<div class="bg-text-ch">
+縱看五次總統大選的數據，有兩次選舉國民兩黨的得票率較為懸殊，一為2000年，差距為16.2%，二為2008年的16.9%。
+<br />比較當時的選舉氣氛發現，2000年為李登輝執政12年卸任後，首次民選總統，因此社會普遍希望政治改革，加上該年除了國民兩黨競選，也有兩組無黨籍候選人競爭，因此票源又更分散。最後由陳水扁與呂秀蓮搭檔的民進黨組合，以39.3%的得票率當選，為中華民國首次政黨輪替。
+<br />2008年則是民進黨執政8年後的政黨輪替，當時因為總統府高層的弊案相繼爆發，陳水扁陷國務機要費的貪汙案中，造成民進黨的聲望重挫，繼而影響了1月的立委選舉以及3月的總統大選。當年馬英九與蕭萬長的國民黨組合，便以58.45%的得票率當選總統副總統一職，同時掌握行政部門及立法院過半席次，達到「完全執政」局面。			</div>
 		</div>
 	</div>
 	</body>
 	<script>
 		 var width = 600;
-                        var height = 600;
+                        var height = 700;
                         var svg = d3.select("#svg1")
                                         .attr("width", width)
                                         .attr("height", height);
