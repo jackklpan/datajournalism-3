@@ -14,7 +14,14 @@
 		<script src="js/jquery-1.11.1.js"></script>
 		<script src="js/underscore.js"></script>
 		<script src="js/queue.v1.js"></script>
+<<<<<<< HEAD
 		<script src="js/map.js"></script>
+=======
+		<script src="js/jquery.keyframes.js"></script>
+		<script src="js/prefixfree.js"></script>
+		<!-- <script src="js/prefixfree.dynamic-dom.js"></script> -->
+		
+>>>>>>> c6c1e46f8c284e2bcdd38a0457e6ba21b10f7f66
 		<style>
 			* {
 				position: relative;
@@ -36,6 +43,13 @@
 			#councilor-map > svg {
 				width: 250px;
 				height: 470px;
+			}
+			#difference-map > svg {
+				width: 600px;
+				height: 630px;
+			}
+			#difference-map{
+				text-align:center;				
 			}
 			.county-area{ 
 				cursor: pointer; 
@@ -196,6 +210,7 @@
 			#councilor-map {
 				opacity: 1.0;
 			}
+<<<<<<< HEAD
 			svg{
                         margin: 10px auto;
                 	}
@@ -240,9 +255,146 @@
                 	}
 
 
+=======
+
+
+			#progressbar {
+
+			}
+
+			#difference-map>div>div{
+				z-index: 1000;
+			    height: 10px;
+			    border-radius: 5px;
+			}
+
+			#difference-map div.positive{
+				animation:loadbarpositive 3s;
+    			-webkit-animation:loadbarpositive 3s;
+    			-moz-animation:loadbarpositive 3s
+    			iterationCount: infinite;
+				timingFunction: linear;
+				-webkit-animation-iteration-count: infinite;
+    			-webkit-animation-timing-function: linear;
+			    -moz-animation-iteration-count: infinite;
+			    -moz-animation-timing-function: linear;
+			}
+			#difference-map div.negative{
+				animation:loadbarnegative 3s;
+    			-webkit-animation:loadbarnegative 3s;
+    			-moz-animation:loadbarnegative 3s
+    			iterationCount: infinite;
+				timingFunction: linear;
+				-webkit-animation-iteration-count: infinite;
+    			-webkit-animation-timing-function: linear;
+			    -moz-animation-iteration-count: infinite;
+			    -moz-animation-timing-function: linear;
+			}
+			#difference-map .kmt{
+				background-color: #000094;
+			}
+
+			#difference-map .dpp{
+				background-color: #009A52
+			}
+
+			@keyframes loadbarpositive {
+			    0% {
+			        width: 0%;
+			    }
+			    100% {
+			        width: 100%;
+			        
+			    }
+			}
+			@-webkit-keyframes loadbarpositive {
+			    0% {
+			        width: 0%;
+			    }
+			    100% {
+			        width: 100%;
+			        
+			    }
+			}
+			@keyframes loadbarnegative {
+			    0% {
+			        width: 0%;
+			    }
+			    100% {
+			        width: 100%;
+			    }
+			    from{left:100%;}
+  				to{left:0%;}
+			}
+			@-webkit-keyframes loadbarnegative {
+			    
+			    from{width: 0%;left:100%;}
+  				to{width: 100%;left:0%;}
+			}
+>>>>>>> c6c1e46f8c284e2bcdd38a0457e6ba21b10f7f66
 		</style>
+		<script>
+		var margin_map = {'2010' : { kmt : [-8.45,-2.26,-8.6157,-7.775,-4.69,-28.75], dpp : [7.91,3.09,7.3724,9.82,12.435,3.39]}, 2014 : { kmt : [-14.83,-2.55,-4.2543,-8.18,-12.49,10.37], dpp : [15.26,1.39,5.3076,8.18,12.49,15.29]}};
+
+		function drawMargin(year){
+			var y = "" + year;
+			var coefficient = 140/28.75;
+			for (var i = 0;i < margin_map[y].kmt.length;i++){
+					var w = Math.abs(margin_map[y].kmt[i]*coefficient);
+					$("#kmt-"+i).css("width" , w +"px");
+					if (margin_map[y]['kmt'][i] < 0){
+						$("#kmt-"+i).css("left" , (parseInt($("#kmt-"+i).attr("data-left")) - w+10) +"px");
+						$("#kmt-"+i + ">div").removeClass("positive").addClass("negative");
+					}else {
+						$("#kmt-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left"))) +"px");
+						$("#kmt-"+i + ">div").removeClass("negative").addClass("positive");
+					}
+				}
+				for (var i = 0;i < margin_map[y].dpp.length;i++){
+					var w = Math.abs(margin_map[y].dpp[i]*coefficient);
+					$("#dpp-"+i).css("width" , w +"px");
+					if (margin_map[y]['dpp'][i] < 0){
+						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left")) - w+10) +"px");
+						$("#dpp-"+i + ">div").removeClass("positive").addClass("negative");
+					}else {
+						$("#dpp-"+i).css("left" , (parseInt($("#dpp-"+i).attr("data-left"))) +"px");
+						$("#dpp-"+i + ">div").removeClass("negative").addClass("positive");
+					}
+				}
+
+		}
+			$(document).ready(function(){
+				//drawMargin(2014);
+				drawMargin(2010);
+				drawMargin(2014);
+				
+
+
+
+				// $.keyframe.define([{
+				//     name: 'myfirst',
+				//        '0%':   {width:"0px"},
+				//     '100%': {width:"40px"}
+				// }]);
+
+				// $("#kmt-taipei").playKeyframe({
+				//     name: 'myfirst',
+				//     duration: '2s',
+				//     iterationCount: 'infinite',
+				//     timingFunction: 'ease',
+    //         		direction: 'normal',
+    //         		fillMode: 'forwards'
+
+				// },function () {
+    // 				console.log("hi")
+				// });
+
+			});
+
+		</script>
 	</head>
 	<body>
+<<<<<<< HEAD
 		<div class="article_container" id="article_container">
                         <p style="font-size:30px;">桃園市歷年村里長政黨變化圖</p>
                         <p>
@@ -261,6 +413,52 @@
                 </div>
                 <svg id="svg1">
                 </svg>
+=======
+		<div id="difference-section" style="width:960px;margin-left:auto;margin-right:auto;">
+			<div id="difference-map" style="position:relative">
+				<div id="kmt-0" data-left="630" style="position:absolute;top:170px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-0" data-left="630" style="position:absolute;top:180px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+				<div id="kmt-1" data-left="640" style="position:absolute;top:195px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-1" data-left="640" style="position:absolute;top:205px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+
+				<div id="kmt-2" data-left="590" style="position:absolute;top:200px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-2" data-left="590"style="position:absolute;top:210px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+				<div id="kmt-3" data-left="540"style="position:absolute;top:300px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-3" data-left="540"style="position:absolute;top:310px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+				<div id="kmt-4" data-left="460"style="position:absolute;top:450px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-4" data-left="460" style="position:absolute;top:460px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+				<div id="kmt-5" data-left="520"style="position:absolute;top:470px;">
+					<div style="position:relative"class="kmt"></div>
+				</div>
+				<div id="dpp-5" data-left="520"style="position:absolute;top:480px;">
+					<div style="position:relative"class="dpp"></div>
+				</div>
+			</div>
+		</div>
+
+
+
+>>>>>>> c6c1e46f8c284e2bcdd38a0457e6ba21b10f7f66
 		<div id="mayor-section">
 			<div id="mayor-title">
 				<img class="logo" src="img/icon/logo.png" alt="logo">
@@ -268,6 +466,7 @@
 				<span class="en-title">NINE-IN-ONE ELECTIONS</span>
 			</div>		
 			<div>資料來源：中選會</div>
+			
 			<div id="mayor-map"></div>
 		</div>
 
@@ -333,6 +532,7 @@
 			
 			makeMap(d3.select("#mayor-map"), data, d3.geo.mercator().center([121.75, 24.6]).scale(7500));
 			makeMap(d3.select("#councilor-map"), data, d3.geo.mercator().center([124.05, 23.5]).scale(6600));
+			makeDifferenceMap(d3.select("#difference-map"), data, d3.geo.mercator().center([121.75, 24.6]).scale(7500));
 			
 			appendRegionInfos(d3.select("#councilor-info-wrapper"));
 			appendTooltip(d3.select("#mayor-tooltip"))
@@ -618,6 +818,33 @@
 					.on("mouseover",mouseoverEvent)
 					.on("mousemove",mousemoveEvent)
 					.on("mouseout",mouseoutEvent)
+					
+			// draw county boundary
+			g.append("path")
+				.datum(mesh)
+				.attr("d", path)
+				.attr("class", "county-boundary");
+
+		}
+
+		function makeDifferenceMap(wrapper, data, projection){
+			var g = wrapper.append("svg")
+				.append("g")
+
+			// load data with topojson.js
+			var topo = topojson.feature(data, data.objects["tw-county-2014"]);
+			var mesh = topojson.mesh(data, data.objects["tw-county-2014"])
+
+			// prepare a Mercator projection
+			var path = d3.geo.path().projection(projection);
+
+			// draw county area
+			g.selectAll("path")
+				.data(topo.features, function(d){ return d.properties.COUNTY; })
+				.enter().append("path")
+					.attr("d", path)
+					.attr("class", function(d){	return "county-area "+d.properties.COUNTY; })
+					.style("opacity", 0.7);
 					
 			// draw county boundary
 			g.append("path")
